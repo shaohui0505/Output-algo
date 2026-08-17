@@ -1,0 +1,30 @@
+# 构建产物
+build/
+dist/
+*.spec
+__pycache__/
+*.py[cod]
+*$py.class
+
+# 日志数据（剪切过来的手表日志 .sot 文件及分组结果）
+algo/
+algo_*/
+Alg_*/
+*.sot
+
+# 备份文件
+*.bak
+*.old
+
+# 临时文件
+*.tmp
+*.log
+$RECYCLE.BIN/
+Thumbs.db
+
+# 打包好的 exe（体积大，可选忽略；如需保留可注释掉下一行）
+Output-algo.exe
+*.exe
+
+# 系统目录
+.DS_Store
