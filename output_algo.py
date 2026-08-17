@@ -256,7 +256,7 @@ def main():
 
     # 情况 2: 检测到盘符但未找到 algo 文件夹
     if algo_path is None:
-        messagebox.showerror("错误", "未检测到")
+        messagebox.showerror("错误", "未检测到algo")
         return
 
     # 准备目标目录
