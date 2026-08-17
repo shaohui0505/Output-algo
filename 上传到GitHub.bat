@@ -1,4 +1,4 @@
-@echo off
+﻿@echo off
 chcp 65001 >nul
 setlocal
 
@@ -11,12 +11,12 @@ REM    3. 修改下方 REMOTE_URL 为你的仓库地址
 REM ============================================================
 
 REM ===== 在此填写你的 GitHub 仓库 HTTPS 地址 =====
-set "REMOTE_URL=https://github.com/你的用户名/你的仓库名.git"
+set "REMOTE_URL=https://github.com/shaohui0505/Output-algo.git"
 REM  例如: set "REMOTE_URL=https://github.com/zhangsan/output-algo.git"
 
 REM ===== 你的 Git 用户名和邮箱（提交记录会显示） =====
-set "GIT_NAME=你的名字"
-set "GIT_EMAIL=your@email.com"
+set "GIT_NAME=shaohui0505"
+set "GIT_EMAIL=shaohui0505@users.noreply.github.com"
 
 REM ========== 以下无需修改 ==========
 
