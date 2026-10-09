@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 r"""
-Output-algo: 从手表(E:/I:盘)的 algo 文件夹中剪切日志到本地，并按测试分组整理。
+Output-algo: 从手表(自动扫描所有非系统盘)的 algo 文件夹中剪切日志到本地，并按测试分组整理。
+- 盘符扫描：自动扫描 E~Z 所有盘符（排除 C 系统盘、D 输出/源盘）
+  - 新固件下手表盘符可能是 E/F/G/... 任意一个，不再硬编码
 - 剪切过程：使用 shutil.move（稳定可靠）
 - 分组整理：先按功能名分类，再按序号 0 的出现切分测试
   - 文件夹命名：{功能}_{时间}_测试{N}
@@ -16,8 +18,10 @@ from tkinter import messagebox
 from datetime import datetime, timezone, timedelta
 
 
-# 需要检测的盘符列表（按优先级）
-WATCH_DRIVES = ['E', 'I']
+# 需要排除的盘符（C=系统盘, D=源文件所在盘/输出盘）
+EXCLUDE_DRIVES = {'C', 'D'}
+# 扫描范围: E ~ Z 全部盘符（去掉排除项）
+SCAN_DRIVES = [chr(c) for c in range(ord('E'), ord('Z') + 1) if chr(c) not in EXCLUDE_DRIVES]
 
 # 输出根目录
 OUTPUT_BASE = r'D:\Suunto\Output-algo'
@@ -32,7 +36,7 @@ CST = timezone(timedelta(hours=8))
 
 def find_algo_folder():
     found_drive = None
-    for drive in WATCH_DRIVES:
+    for drive in SCAN_DRIVES:
         drive_path = f'{drive}:\\'
         if os.path.exists(drive_path) and os.path.isdir(drive_path):
             found_drive = drive
@@ -256,7 +260,7 @@ def main():
 
     # 情况 2: 检测到盘符但未找到 algo 文件夹
     if algo_path is None:
-        messagebox.showerror("错误", "未检测到algo")
+        messagebox.showerror("错误", f"未检测到 algo 文件夹（扫描盘符 {drive}:）")
         return
 
     # 准备目标目录
@@ -266,7 +270,7 @@ def main():
     # 检查源 algo 是否为空
     src_entries = os.listdir(algo_path) if os.path.exists(algo_path) else []
     if not src_entries:
-        messagebox.showinfo("提示", "手表的 algo 文件夹是空的，无需传输。")
+        messagebox.showinfo("提示", f"手表 {drive}:\\algo 文件夹是空的，无需传输。")
         return
 
     # 如果已存在旧的 algo 文件夹，重命名为带时间戳的备份
@@ -350,7 +354,7 @@ def main():
 
     # ---- 结果提示 ----
     msg_lines = []
-    msg_lines.append(f"剪切完成，已按测试分组整理。")
+    msg_lines.append(f"剪切完成（源盘 {drive}:），已按测试分组整理。")
     msg_lines.append(f"")
     msg_lines.append(f"生成测试组数: {total_groups}")
     msg_lines.append(f"成功移动文件数: {moved_count}")
